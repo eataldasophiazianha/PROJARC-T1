@@ -6,6 +6,9 @@ import { PrismaService } from 'src/persistence/config/prisma';
 @Injectable()
 export class PrismaQuoteRepository implements QuoteRepository {
   constructor(private readonly prisma: PrismaService) {}
+  findByCode(code: string): Promise<Quote | null> {
+    throw new Error('Method not implemented.');
+  }
   findAll(): Promise<Quote[]> {
     throw new Error('Method not implemented.');
   }

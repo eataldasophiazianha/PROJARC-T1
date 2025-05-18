@@ -1,140 +1,168 @@
-import { ItemOrder } from './item-order';
-import { Order } from './order';
+import { QuoteItem } from './quote-item';
 
 export enum QuoteStatus {
-  PENDENTE = 'PENDENTE',
-  EFETIVADO = 'EFETIVADO',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  EXPIRED = 'EXPIRED',
 }
 
 export class Quote {
   id: number;
-  customer: string;
+  code: string;
+  date: Date;
+  clientName: string;
   country: string;
   state: string;
-  items: ItemOrder[];
-  date: Date;
-  status: QuoteStatus;
-  stateTax: number;
-  federalTax: number;
-  itemDiscount: number;
-  totalDiscount: number;
+  stateTaxPercent: number;
+  federalTaxPercent: number;
+  stateTaxAmount: number;
+  federalTaxAmount: number;
+  discountPercent: number;
+  discountAmount: number;
   totalValue: number;
-  customerCost: number;
+  finalValue: number;
+  status: QuoteStatus;
+  validUntil: Date;
+  items?: QuoteItem[];
 
-  constructor(quote: Quote) {
-    this.id = quote.id;
-    this.customer = quote.customer;
-    this.country = quote.country;
-    this.state = quote.state;
-    this.items = quote.items;
-    this.date = quote.date;
-    this.status = quote.status;
-    this.stateTax = quote.stateTax;
-    this.federalTax = quote.federalTax;
-    this.itemDiscount = quote.itemDiscount;
-    this.totalDiscount = quote.totalDiscount;
-    this.totalValue = quote.totalValue;
-    this.customerCost =
-      this.getItemsCost() + this.getTax() - this.getDiscount();
-  }
-
-  public addItemsFromOrder(order: Order): void {
-    for (const item of order.getItems()) {
-      this.items.push(item);
-    }
-  }
-
-  public getItems(): ItemOrder[] {
-    return [...this.items];
+  constructor(
+    id: number,
+    code: string,
+    date: Date,
+    clientName: string,
+    country: string,
+    state: string,
+    stateTaxPercent: number,
+    federalTaxPercent: number,
+    stateTaxAmount: number,
+    federalTaxAmount: number,
+    discountPercent: number,
+    discountAmount: number,
+    totalValue: number,
+    finalValue: number,
+    status: QuoteStatus,
+    validUntil: Date,
+    items?: QuoteItem[],
+  ) {
+    this.id = id;
+    this.code = code;
+    this.date = date;
+    this.clientName = clientName;
+    this.country = country;
+    this.state = state;
+    this.stateTaxPercent = stateTaxPercent;
+    this.federalTaxPercent = federalTaxPercent;
+    this.stateTaxAmount = stateTaxAmount;
+    this.federalTaxAmount = federalTaxAmount;
+    this.discountPercent = discountPercent;
+    this.discountAmount = discountAmount;
+    this.totalValue = totalValue;
+    this.finalValue = finalValue;
+    this.status = status;
+    this.validUntil = validUntil;
+    this.items = items;
   }
 
   public getId(): number {
     return this.id;
   }
-
-  public setId(id: number): void {
-    this.id = id;
+  public setId(value: number) {
+    this.id = value;
   }
-
-  public getItemsCost(): number {
-    return this.items
-      .map((item) => item.getProduct().getUnitPrice() * item.getQuantity())
-      .reduce((a, b) => a + b, 0);
+  public getCode(): string {
+    return this.code;
   }
-  public getCustomer(): string {
-    return this.customer;
-  }
-  public setCustomer(customer: string): void {
-    this.customer = customer;
-  }
-  public getCountry(): string {
-    return this.country;
-  }
-  public setCountry(country: string): void {
-    this.country = country;
-  }
-  public getState(): string {
-    return this.state;
-  }
-  public setState(state: string): void {
-    this.state = state;
+  public setCode(value: string) {
+    this.code = value;
   }
   public getDate(): Date {
     return this.date;
   }
-  public setDate(date: Date): void {
-    this.date = date;
+  public setDate(value: Date) {
+    this.date = value;
   }
-  public getStatus(): QuoteStatus {
-    return this.status;
+  public getClientName(): string {
+    return this.clientName;
   }
-  public setStatus(status: QuoteStatus): void {
-    this.status = status;
+  public setClientName(value: string) {
+    this.clientName = value;
   }
-
-  public getStateTax(): number {
-    return this.stateTax;
+  public getCountry(): string {
+    return this.country;
   }
-
-  public setStateTax(stateTax: number): void {
-    this.stateTax = stateTax;
+  public setCountry(value: string) {
+    this.country = value;
   }
-  public getFederalTax(): number {
-    return this.federalTax;
+  public getState(): string {
+    return this.state;
   }
-  public setFederalTax(federalTax: number): void {
-    this.federalTax = federalTax;
+  public setState(value: string) {
+    this.state = value;
   }
-  public getItemDiscount(): number {
-    return this.itemDiscount;
+  public getStateTaxPercent(): number {
+    return this.stateTaxPercent;
   }
-  public setItemDiscount(itemDiscount: number): void {
-    this.itemDiscount = itemDiscount;
+  public setStateTaxPercent(value: number) {
+    this.stateTaxPercent = value;
   }
-  public getTotalDiscount(): number {
-    return this.totalDiscount;
+  public getFederalTaxPercent(): number {
+    return this.federalTaxPercent;
   }
-  public setTotalDiscount(totalDiscount: number): void {
-    this.totalDiscount = totalDiscount;
+  public setFederalTaxPercent(value: number) {
+    this.federalTaxPercent = value;
+  }
+  public getStateTaxAmount(): number {
+    return this.stateTaxAmount;
+  }
+  public setStateTaxAmount(value: number) {
+    this.stateTaxAmount = value;
+  }
+  public getFederalTaxAmount(): number {
+    return this.federalTaxAmount;
+  }
+  public setFederalTaxAmount(value: number) {
+    this.federalTaxAmount = value;
+  }
+  public getDiscountPercent(): number {
+    return this.discountPercent;
+  }
+  public setDiscountPercent(value: number) {
+    this.discountPercent = value;
+  }
+  public getDiscountAmount(): number {
+    return this.discountAmount;
+  }
+  public setDiscountAmount(value: number) {
+    this.discountAmount = value;
   }
   public getTotalValue(): number {
     return this.totalValue;
   }
-  public setTotalValue(totalValue: number): void {
-    this.totalValue = totalValue;
+  public setTotalValue(value: number) {
+    this.totalValue = value;
   }
-  public getTax(): number {
-    return this.stateTax + this.federalTax;
+  public getFinalValue(): number {
+    return this.finalValue;
   }
-  public getDiscount(): number {
-    return this.itemDiscount + this.totalDiscount;
+  public setFinalValue(value: number) {
+    this.finalValue = value;
   }
-
-  public getConsumerCost(): number {
-    return this.getItemsCost() + this.getTax() - this.getDiscount();
+  public getStatus(): QuoteStatus {
+    return this.status;
   }
-
-  public toString(): string {
-    return `Quote [id=${this.id}, customer=${this.customer}, country=${this.country}, state=${this.state}, items=${this.items}, date=${this.date}, status=${this.status}, stateTax=${this.stateTax}, federalTax=${this.federalTax}, itemDiscount=${this.itemDiscount}, totalDiscount=${this.totalDiscount}, totalValue=${this.totalValue}]`;
+  public setStatus(value: QuoteStatus) {
+    this.status = value;
+  }
+  public getValidUntil(): Date {
+    return this.validUntil;
+  }
+  public setValidUntil(value: Date) {
+    this.validUntil = value;
+  }
+  public getItems(): QuoteItem[] | undefined {
+    return this.items;
+  }
+  public setItems(value: QuoteItem[] | undefined) {
+    this.items = value;
   }
 }

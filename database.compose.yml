@@ -1,6 +1,6 @@
 services:
-  database:
-    container_name: database
+  projarc-database:
+    container_name: projarc-database
     image: postgres:16
     environment:
       POSTGRES_USER: admin

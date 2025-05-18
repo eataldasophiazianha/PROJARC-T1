@@ -14,28 +14,6 @@ export class PrismaService
 
   async onModuleInit() {
     await this.$connect();
-
-    const password = await this.hash.generateHash('123456');
-
-    // await this.user.upsert({
-    //   where: { email: 'email@email.com' },
-    //   update: {},
-    //   create: {
-    //     email: 'email@email.com',
-    //     name: 'name',
-    //     password: password,
-    //     phone: '0000000000',
-    //     city: 'City',
-    //     state: 'State',
-    //     language: 'PORTUGUESE',
-    //     role: RoleEnum.ADMIN,
-    //     admin: {
-    //       create: {
-    //         id: 'admin',
-    //       },
-    //     },
-    //   },
-    // });
   }
 
   async onModuleDestroy() {
