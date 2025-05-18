@@ -1,27 +1,149 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from 'src/domain/model/product';
+import { Stock } from 'src/domain/model/stock';
 import { ProductRepository } from 'src/domain/persistence/product-repository';
 import { PrismaService } from 'src/persistence/config/prisma';
+import { ProductMapper } from 'src/persistence/mappers/product-mapper';
 
 @Injectable()
 export class PrismaProductRepository implements ProductRepository {
   constructor(private readonly prisma: PrismaService) {}
-  findById(id: number): Promise<Product | null> {
-    throw new Error('Method not implemented.');
+  async findById(id: number): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: { stock: true },
+    });
+
+    if (!product) {
+      return null;
+    }
+
+    if (!product.stock) {
+      return null;
+    }
+    const stock = new Stock(
+      {
+        productId: product.stock.productId,
+        minQuantity: product.stock.minQuantity,
+        maxQuantity: product.stock.maxQuantity,
+        currentQuantity: product.stock.currentQuantity,
+        updatedAt: product.stock.updatedAt,
+      },
+      product.stock.id,
+    );
+
+    const productWithStock = {
+      ...product,
+      stock,
+    };
+
+    return ProductMapper.toDomain(productWithStock);
   }
-  findByCode(code: string): Promise<Product | null> {
-    throw new Error('Method not implemented.');
+  async findByCode(code: string): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: { code },
+      include: { stock: true },
+    });
+
+    if (!product) {
+      return null;
+    }
+    if (!product.stock) {
+      return null;
+    }
+    const stock = new Stock(
+      {
+        productId: product.stock.productId,
+        minQuantity: product.stock.minQuantity,
+        maxQuantity: product.stock.maxQuantity,
+        currentQuantity: product.stock.currentQuantity,
+        updatedAt: product.stock.updatedAt,
+      },
+      product.stock.id,
+    );
+
+    const productWithStock = {
+      ...product,
+      stock,
+    };
+
+    return ProductMapper.toDomain(productWithStock);
   }
-  save(product: Product): Promise<Product> {
-    throw new Error('Method not implemented.');
+  async save(product: Product): Promise<void> {
+    const productData = ProductMapper.toPersistence(product);
+
+    await this.prisma.product.create({
+      data: {
+        code: productData.code,
+        description: productData.description,
+        price: productData.price,
+      },
+    });
   }
-  delete(id: number): Promise<void> {
-    throw new Error('Method not implemented.');
+
+  async findAll(): Promise<Product[]> {
+    const products = await this.prisma.product.findMany({
+      include: { stock: true },
+    });
+
+    if (!products) {
+      return [];
+    }
+    const res = products.map((product) => {
+      if (!product.stock) {
+        return null;
+      }
+      const stock = new Stock(
+        {
+          productId: product.stock.productId,
+          minQuantity: product.stock.minQuantity,
+          maxQuantity: product.stock.maxQuantity,
+          currentQuantity: product.stock.currentQuantity,
+          updatedAt: product.stock.updatedAt,
+        },
+        product.stock.id,
+      );
+
+      const productWithStock = {
+        ...product,
+        stock,
+      };
+
+      return ProductMapper.toDomain(productWithStock);
+    });
+    return res.filter((product) => product !== null) as Product[];
   }
-  findAll(): Promise<Product[]> {
-    throw new Error('Method not implemented.');
-  }
-  getById(id: number): Promise<Product | null> {
-    throw new Error('Method not implemented.');
+  async getById(id: number): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: { stock: true },
+    });
+
+    if (!product) {
+      return null;
+    }
+
+    if (product.stock) {
+      const stock = new Stock(
+        {
+          productId: product.stock.productId,
+          minQuantity: product.stock.minQuantity,
+          maxQuantity: product.stock.maxQuantity,
+          currentQuantity: product.stock.currentQuantity,
+          updatedAt: product.stock.updatedAt,
+        },
+        product.stock.id,
+      );
+      const productWithStock = {
+        ...product,
+        stock,
+      };
+      return ProductMapper.toDomain(productWithStock);
+    }
+
+    return ProductMapper.toDomain({
+      ...product,
+      stock: undefined,
+    });
   }
 }

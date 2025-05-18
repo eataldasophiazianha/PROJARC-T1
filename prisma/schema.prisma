@@ -14,8 +14,8 @@ model Product {
   code        String      @unique
   description String
   price       Float     
-  stock       Stock       @relation(fields: [stockId], references: [id])
-  stockId     Int         @unique
+  stock       Stock?       @relation(fields: [stockId], references: [id])
+  stockId     Int?         @unique
   quoteItems  QuoteItem[]
 }
 

@@ -10,20 +10,37 @@ export class PrismaStockRepository implements StockRepository {
     const stock = await this.prisma.stock.findUnique({
       where: { id },
     });
-    return stock ? stock.quantity : 0;
+
+    if (!stock) {
+      throw new Error('Stock not found');
+    }
+
+    return stock.currentQuantity;
   }
 
   async decreaseStock(id: number, quantity: number): Promise<void> {
+    const stock = await this.prisma.stock.findUnique({
+      where: { id },
+    });
+
+    if (!stock) {
+      throw new Error('Stock not found');
+    }
+
+    if (stock.currentQuantity < quantity) {
+      throw new Error('Insufficient stock');
+    }
+
     await this.prisma.stock.update({
       where: { id },
-      data: { quantity: { decrement: quantity } },
+      data: { currentQuantity: { decrement: quantity } },
     });
   }
 
   async increaseStock(id: number, quantity: number): Promise<void> {
     await this.prisma.stock.update({
       where: { id },
-      data: { quantity: { increment: quantity } },
+      data: { currentQuantity: { increment: quantity } },
     });
   }
 }
