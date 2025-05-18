@@ -6,6 +6,24 @@ export enum QuoteStatus {
   EXPIRED = 'EXPIRED',
 }
 
+interface QuoteProps {
+  code: string;
+  date: Date;
+  clientName: string;
+  country: string;
+  state: string;
+  stateTaxPercent: number;
+  federalTaxPercent: number;
+  stateTaxAmount: number;
+  federalTaxAmount: number;
+  discountPercent: number;
+  discountAmount: number;
+  totalValue: number;
+  finalValue: number;
+  status: QuoteStatus;
+  validUntil: Date;
+  items?: QuoteItem[];
+}
 export class Quote {
   id: number;
   code: string;
@@ -25,42 +43,24 @@ export class Quote {
   validUntil: Date;
   items?: QuoteItem[];
 
-  constructor(
-    id: number,
-    code: string,
-    date: Date,
-    clientName: string,
-    country: string,
-    state: string,
-    stateTaxPercent: number,
-    federalTaxPercent: number,
-    stateTaxAmount: number,
-    federalTaxAmount: number,
-    discountPercent: number,
-    discountAmount: number,
-    totalValue: number,
-    finalValue: number,
-    status: QuoteStatus,
-    validUntil: Date,
-    items?: QuoteItem[],
-  ) {
+  constructor(quoteProps: QuoteProps, id: number) {
     this.id = id;
-    this.code = code;
-    this.date = date;
-    this.clientName = clientName;
-    this.country = country;
-    this.state = state;
-    this.stateTaxPercent = stateTaxPercent;
-    this.federalTaxPercent = federalTaxPercent;
-    this.stateTaxAmount = stateTaxAmount;
-    this.federalTaxAmount = federalTaxAmount;
-    this.discountPercent = discountPercent;
-    this.discountAmount = discountAmount;
-    this.totalValue = totalValue;
-    this.finalValue = finalValue;
-    this.status = status;
-    this.validUntil = validUntil;
-    this.items = items;
+    this.code = quoteProps.code;
+    this.date = quoteProps.date;
+    this.clientName = quoteProps.clientName;
+    this.country = quoteProps.country;
+    this.state = quoteProps.state;
+    this.stateTaxPercent = quoteProps.stateTaxPercent;
+    this.federalTaxPercent = quoteProps.federalTaxPercent;
+    this.stateTaxAmount = quoteProps.stateTaxAmount;
+    this.federalTaxAmount = quoteProps.federalTaxAmount;
+    this.discountPercent = quoteProps.discountPercent;
+    this.discountAmount = quoteProps.discountAmount;
+    this.totalValue = quoteProps.totalValue;
+    this.finalValue = quoteProps.finalValue;
+    this.status = quoteProps.status;
+    this.validUntil = quoteProps.validUntil;
+    this.items = quoteProps.items;
   }
 
   public getId(): number {

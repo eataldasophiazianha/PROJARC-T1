@@ -1,21 +1,24 @@
 import { Product } from './product';
 
+interface StockProps {
+  productId: number;
+  quantity: number;
+  stockId: number;
+  entryDate: Date;
+}
 export class StockEntry {
   id: number;
   productId: number;
   quantity: number;
   entryDate: Date;
+  stockId: number;
 
-  constructor(
-    id: number,
-    productId: number,
-    quantity: number,
-    entryDate: Date,
-  ) {
+  constructor(stockProps: StockProps, id: number) {
     this.id = id;
-    this.productId = productId;
-    this.quantity = quantity;
-    this.entryDate = entryDate;
+    this.productId = stockProps.productId;
+    this.quantity = stockProps.quantity;
+    this.entryDate = stockProps.entryDate;
+    this.stockId = stockProps.stockId;
   }
 
   public getId(): number {
@@ -41,5 +44,12 @@ export class StockEntry {
   }
   public setEntryDate(value: Date) {
     this.entryDate = value;
+  }
+
+  public getStockId(): number {
+    return this.stockId;
+  }
+  public setStockId(value: number) {
+    this.stockId = value;
   }
 }

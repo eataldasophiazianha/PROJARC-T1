@@ -1,28 +1,24 @@
-import { QuoteItem } from './quote-item';
 import { Stock } from './stock';
 
+interface ProductProps {
+  code: string;
+  description: string;
+  price: number;
+  stock?: Stock;
+}
 export class Product {
   id: number;
   code: string;
   description: string;
   price: number;
   stock?: Stock;
-  quoteItems?: QuoteItem[];
 
-  constructor(
-    id: number,
-    code: string,
-    description: string,
-    price: number,
-    stock?: Stock,
-    quoteItems?: QuoteItem[],
-  ) {
-    this.id = id;
-    this.code = code;
-    this.description = description;
-    this.price = price;
-    this.stock = stock;
-    this.quoteItems = quoteItems;
+  constructor(productProps: ProductProps, id: number) {
+    this.id = id ?? Math.floor(Math.random() * 1000000);
+    this.code = productProps.code;
+    this.description = productProps.description;
+    this.price = productProps.price;
+    this.stock = productProps.stock;
   }
 
   public getId(): number {
@@ -54,11 +50,5 @@ export class Product {
   }
   public setStock(value: Stock | undefined) {
     this.stock = value;
-  }
-  public getQuoteItems(): QuoteItem[] | undefined {
-    return this.quoteItems;
-  }
-  public setQuoteItems(value: QuoteItem[] | undefined) {
-    this.quoteItems = value;
   }
 }

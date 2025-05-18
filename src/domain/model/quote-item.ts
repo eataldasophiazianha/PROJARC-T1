@@ -1,6 +1,16 @@
+import { randomInt } from 'node:crypto';
 import { Product } from './product';
 import { Quote } from './quote';
 
+interface QuoteItemProps {
+  quoteId: number;
+  productId: number;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+  product?: Product;
+  quote?: Quote;
+}
 export class QuoteItem {
   id: number;
   quoteId: number;
@@ -11,24 +21,15 @@ export class QuoteItem {
   product?: Product;
   quote?: Quote;
 
-  constructor(
-    id: number,
-    quoteId: number,
-    productId: number,
-    quantity: number,
-    unitPrice: number,
-    total: number,
-    product?: Product,
-    quote?: Quote,
-  ) {
-    this.id = id;
-    this.quoteId = quoteId;
-    this.productId = productId;
-    this.quantity = quantity;
-    this.unitPrice = unitPrice;
-    this.total = total;
-    this.product = product;
-    this.quote = quote;
+  constructor(quoteItemProps: QuoteItemProps, id: number) {
+    this.id = id ?? Math.floor(Math.random() * 1000000);
+    this.quoteId = quoteItemProps.quoteId;
+    this.productId = quoteItemProps.productId;
+    this.quantity = quoteItemProps.quantity;
+    this.unitPrice = quoteItemProps.unitPrice;
+    this.total = quoteItemProps.total;
+    this.product = quoteItemProps.product;
+    this.quote = quoteItemProps.quote;
   }
 
   public getId(): number {

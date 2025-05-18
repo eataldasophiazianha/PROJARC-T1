@@ -11,31 +11,22 @@ export class PrismaStockEntryRepository implements StockEntryRepository {
   }
 
   async findById(id: number): Promise<StockEntry | null> {
-    return this.prisma.stockEntry.findUnique({
-      where: { id },
-    });
+    throw new Error('Method not implemented.');
   }
 
   async findAll(): Promise<StockEntry[]> {
-    return this.prisma.stockEntry.findMany();
+    throw new Error('Method not implemented.');
   }
 
   async create(stockEntry: StockEntry): Promise<StockEntry> {
-    return this.prisma.stockEntry.create({
-      data: stockEntry,
-    });
+    throw new Error('Method not implemented.');
   }
 
   async update(id: number, stockEntry: StockEntry): Promise<StockEntry> {
-    return this.prisma.stockEntry.update({
-      where: { id },
-      data: stockEntry,
-    });
+    throw new Error('Method not implemented.');
   }
 
   async delete(id: number): Promise<void> {
-    await this.prisma.stockEntry.delete({
-      where: { id },
-    });
+    throw new Error('Method not implemented.');
   }
 }

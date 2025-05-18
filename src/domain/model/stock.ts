@@ -1,5 +1,13 @@
 import { Product } from './product';
 
+interface StockProps {
+  productId: number;
+  minQuantity: number;
+  maxQuantity: number;
+  currentQuantity: number;
+  updatedAt: Date;
+}
+
 export class Stock {
   id: number;
   productId: number;
@@ -7,24 +15,14 @@ export class Stock {
   maxQuantity: number;
   currentQuantity: number;
   updatedAt: Date;
-  product?: Product;
 
-  constructor(
-    id: number,
-    productId: number,
-    minQuantity: number,
-    maxQuantity: number,
-    currentQuantity: number,
-    updatedAt: Date,
-    product?: Product,
-  ) {
+  constructor(stockProps: StockProps, id: number) {
     this.id = id;
-    this.productId = productId;
-    this.minQuantity = minQuantity;
-    this.maxQuantity = maxQuantity;
-    this.currentQuantity = currentQuantity;
-    this.updatedAt = updatedAt;
-    this.product = product;
+    this.productId = stockProps.productId;
+    this.minQuantity = stockProps.minQuantity;
+    this.maxQuantity = stockProps.maxQuantity;
+    this.currentQuantity = stockProps.currentQuantity;
+    this.updatedAt = stockProps.updatedAt;
   }
 
   public getId(): number {
@@ -62,11 +60,5 @@ export class Stock {
   }
   public setUpdatedAt(value: Date) {
     this.updatedAt = value;
-  }
-  public getProduct(): Product | undefined {
-    return this.product;
-  }
-  public setProduct(value: Product | undefined) {
-    this.product = value;
   }
 }
