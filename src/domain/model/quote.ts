@@ -44,7 +44,7 @@ export class Quote {
   items?: QuoteItem[];
 
   constructor(quoteProps: QuoteProps, id: number) {
-    this.id = id;
+    this.id = id ?? Math.floor(Math.random() * 1000000);
     this.code = quoteProps.code;
     this.date = quoteProps.date;
     this.clientName = quoteProps.clientName;

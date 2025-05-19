@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { Stock } from 'src/domain/model/stock';
 import { StockRepository } from 'src/domain/persistence/stock-repository';
 import { PrismaService } from 'src/persistence/config/prisma';
+import { StockMapper } from 'src/persistence/mappers/stock-mapper';
 
 @Injectable()
 export class PrismaStockRepository implements StockRepository {
@@ -42,5 +44,17 @@ export class PrismaStockRepository implements StockRepository {
       where: { id },
       data: { currentQuantity: { increment: quantity } },
     });
+  }
+
+  async findByProductId(productId: number): Promise<Stock | null> {
+    const stock = await this.prisma.stock.findUnique({
+      where: { productId },
+    });
+
+    if (!stock) {
+      return null;
+    }
+
+    return StockMapper.toDomain(stock);
   }
 }

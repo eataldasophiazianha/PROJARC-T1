@@ -16,8 +16,8 @@ export class Stock {
   currentQuantity: number;
   updatedAt: Date;
 
-  constructor(stockProps: StockProps, id: number) {
-    this.id = id;
+  constructor(stockProps: StockProps, id?: number) {
+    this.id = id ?? Math.floor(Math.random() * 1000000);
     this.productId = stockProps.productId;
     this.minQuantity = stockProps.minQuantity;
     this.maxQuantity = stockProps.maxQuantity;

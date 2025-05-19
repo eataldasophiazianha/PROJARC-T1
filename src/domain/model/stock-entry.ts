@@ -13,8 +13,8 @@ export class StockEntry {
   entryDate: Date;
   stockId: number;
 
-  constructor(stockProps: StockProps, id: number) {
-    this.id = id;
+  constructor(stockProps: StockProps, id?: number) {
+    this.id = id ?? Math.floor(Math.random() * 1000000);
     this.productId = stockProps.productId;
     this.quantity = stockProps.quantity;
     this.entryDate = stockProps.entryDate;
