@@ -85,33 +85,34 @@ export class PrismaProductRepository implements ProductRepository {
     const products = await this.prisma.product.findMany({
       include: { stock: true },
     });
-
-    if (!products) {
+    console.log('products', products);
+    if (products.length === 0) {
       return [];
     }
-    const res = products.map((product) => {
-      if (!product.stock) {
-        return null;
-      }
-      const stock = new Stock(
-        {
-          productId: product.stock.productId,
-          minQuantity: product.stock.minQuantity,
-          maxQuantity: product.stock.maxQuantity,
-          currentQuantity: product.stock.currentQuantity,
-          updatedAt: product.stock.updatedAt,
-        },
-        product.stock.id,
-      );
 
+    const productsWithStock = products.map((product) => {
+      if (!product.stock) {
+        return ProductMapper.toDomain({
+          ...product,
+          stock: undefined,
+        });
+      }
+      const stock = new Stock({
+        productId: product.stock.productId,
+        minQuantity: product.stock.minQuantity,
+        maxQuantity: product.stock.maxQuantity,
+        currentQuantity: product.stock.currentQuantity,
+        updatedAt: product.stock.updatedAt,
+      });
       const productWithStock = {
         ...product,
         stock,
       };
-
       return ProductMapper.toDomain(productWithStock);
     });
-    return res.filter((product) => product !== null) as Product[];
+    console.log('productWithStock', productsWithStock);
+
+    return productsWithStock;
   }
   async getById(id: number): Promise<Product | null> {
     const product = await this.prisma.product.findUnique({
@@ -138,6 +139,7 @@ export class PrismaProductRepository implements ProductRepository {
         ...product,
         stock,
       };
+      console.log('productWithStock', productWithStock);
       return ProductMapper.toDomain(productWithStock);
     }
 
